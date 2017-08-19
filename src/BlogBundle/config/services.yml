@@ -1,0 +1,27 @@
+services:
+      blog.lookupservice:
+              class: BlogBundle\Service\LookupService
+              arguments: ['@doctrine.orm.entity_manager']
+              public: true
+
+      blog.tagservice:
+              class: BlogBundle\Service\TagService
+              arguments: ['@doctrine.orm.entity_manager']
+              public: true
+
+      blog.accessdenied:
+             class: BlogBundle\Security\AccessDeniedHandler
+             public: true
+
+      blog.entrypoint:
+            class: BlogBundle\Security\EntryPoint
+            arguments: ['@service_container']
+
+      #blog.event.postlistener:
+      #       class:
+      BlogBundle\EventListener\PostListener:
+             arguments: ['@service_container']
+             tags:
+                 - { name: doctrine.event_listener, event: postPersist }
+                 - { name: doctrine.event_listener, event: postUpdate }
+                 - { name: doctrine.event_listener, event: postRemove }

@@ -1,0 +1,17 @@
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ path('homepage') }}">Home</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ path("blogbundle_test") }}">Test</a></li>
+            <li><a href="{{ path('admin') }}">Admin</a></li>
+            {%   if app.user %}
+                <li><a href="{{ path('logout') }}">Logout</a></li>
+            {%  else %}
+                <li><a href="{{ path('login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+    </div><!-- /.container-->
+</nav>

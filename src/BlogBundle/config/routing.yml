@@ -1,0 +1,40 @@
+homepage:
+      path: /{page}
+      defaults: {_controller: BlogBundle:Post:index, page: 1}
+      requirements: {page: \d+}
+
+login:
+     path: /login
+     defaults: {_controller: BlogBundle:User:login}
+
+logout:
+    path: /logout
+
+admin:
+    path: /admin
+    defaults: {_controller: BlogBundle:User:admin}
+
+blogbundle_post_create:
+    path: /post/create
+    defaults: {_controller: BlogBundle:Post:create}
+
+
+blogbundle_post_update:
+    path: /post/update/{id}
+    defaults: {_controller: BlogBundle:Post:update}
+    requirements: {id: \d+}
+
+blogbundle_post_view:
+    path: /post/view/{id}
+    defaults: {_controller: BlogBundle:Post:view}
+    requirements: {id: \d+}
+
+blogbundle_post_delete:
+    path: /post/delete/{id}
+    defaults: {_controller: BlogBundle:Post:delete}
+    requirements: {id: \d+}
+    methods: POST
+
+blogbundle_test:
+    path: /test
+    defaults: {_controller: BlogBundle:Post:test }

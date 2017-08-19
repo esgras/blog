@@ -1,0 +1,14 @@
+{% extends 'BlogBundle::main.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ post.title }}</h1>
+            <div class="post-content">
+                {{ post.content }}
+            </div>
+            <div class="post-meta">
+                Author: {{ post.author.username }} at {{ post.create_time|date("Y-m-d") }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

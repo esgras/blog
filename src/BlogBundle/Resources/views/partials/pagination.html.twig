@@ -1,0 +1,22 @@
+<nav aria-label="Page navigation" class="text-center">
+    <ul class="pagination">
+        {% if page != 1 %}
+        <li>
+            <a href="{{ path((routeName), {(paramName): page - 1}) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for key in pageList %}
+            <li {% if  page == key %}class="active"{% endif %}>
+                <a href="{{ path((routeName), {(paramName): key}) }}">{{ key }}</a>
+            </li>
+        {% endfor %}
+        {% if (page < pageCount) %}
+            <li>
+                <a href="{{ path((routeName), {(paramName): page + 1}) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>

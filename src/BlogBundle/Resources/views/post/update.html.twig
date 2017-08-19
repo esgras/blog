@@ -1,0 +1,6 @@
+{% extends 'BlogBundle::main.html.twig' %}
+{% block title %}Update Post {{ post.title }}{% endblock %}
+{% block body %}
+    <h1 class="text-center">Update Post {{ post.title }}</h1>
+    {{ form(form) }}
+{% endblock %}

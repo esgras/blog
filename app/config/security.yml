@@ -1,0 +1,56 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+
+    encoders:
+       Symfony\Component\Security\Core\User\User: plaintext
+       BlogBundle\Entity\User: bcrypt
+
+    role_hierarchy:
+            ROLE_ADMIN: ROLE_USER
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+
+    providers:
+        chain_provider:
+              chain:
+                  providers: [in_db, in_memory]
+
+        in_memory:
+            memory:
+                users:
+                      user:
+                          password: user
+                          roles: ROLE_ADMIN
+        in_db:
+            entity:
+                class: BlogBundle:User
+                property: username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        #safe:
+         #     pattern: ^/$
+         #     provider: in_memory
+        #      security: false
+
+        main:
+            provider: chain_provider
+            anonymous: ~
+            #access_denied_handler: blog.accessdenied
+            entry_point: blog.entrypoint
+            form_login:
+                  login_path: login
+                  check_path: login
+            logout:
+                  path: logout
+
+    access_control:
+        - {path: ^/$, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
+        - {path: ^/post/view, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
+        - {path: (index|login|\d+)$, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
+        - {path: .*, roles: 'ROLE_USER'}
