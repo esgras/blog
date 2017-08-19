@@ -3,6 +3,8 @@
 namespace BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -176,5 +178,16 @@ class Comment
     public function beforeCreate()
     {
         $this->create_time = new \DateTime;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addConstraint('author', new Assert\NotBlank());
+        $metadata->addConstraint('author', new Assert\Length(['min' => 3, 'max' => 20]));
+        $metadata->addConstraint('email', new Assert\NotBlank());
+        $metadata->addConstraint('email', new Assert\Email());
+        $metadata->addConstraint('url', new Assert\Url);
+        $metadata->addConstraint('content', new Assert\NotBlank());
+        $metadata->addConstraint('length', new Assert\Length(['max' => 100]));
     }
 }
