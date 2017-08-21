@@ -9,9 +9,10 @@ class PostRepository extends BaseRepository
     public function getEntitiesCount($params=[])
     {
         $query = $this->createQueryBuilder('e')->select('COUNT(e)');
-//            if (!empty($params['tag'])) {
-//                $query->where('e.tags LIKE %'.$params['tag'].'%');
-//            }
+            if (!empty($params['tag'])) {
+                $query->andWhere('e.tags LIKE :tags')
+                    ->setParameter('tags', '%'.$params['tag'].'%');
+            }
             return (int) $query->getQuery()->getSingleScalarResult();
     }
 
@@ -19,9 +20,11 @@ class PostRepository extends BaseRepository
     {
         $offset = ($page - 1) * $limit;
         $query = $this->createQueryBuilder('e')->select('e');
-//        if (!empty($params['tag'])) {
-//            $query->where('e.tags LIKE %'.$params['tag'].'%');
-//        }
+        if (!empty($params['tag'])) {
+            $query->andWhere('e.tags LIKE :tags')
+                  ->setParameter('tags', '%'.$params['tag'].'%');
+            #$query->where('e.tags LIKE %'.$params['tag'].'%');
+        }
 
            $query->setFirstResult($offset)
                      ->setMaxResults($limit);

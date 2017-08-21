@@ -36,7 +36,7 @@ class PostController extends BaseController
         $posts = $this->repo->getEntitesForPage($page, $perPage, false, ['tag' => $tag]);
         $pageCount = (new Pager($page, $perPage, $postsCount))->getPageCount();
 
-        #var_dump($posts); die;
+        #var_dump($pageCount); die;
 
         if ($page < 1 || $page > $pageCount) {
             throw $this->createNotFoundException();
@@ -47,7 +47,7 @@ class PostController extends BaseController
             'count' => $postsCount,
             'page' => $page,
             'perPage' => $perPage,
-             'tag' => $tag
+            'tag' => $tag
         ]);
     }
 

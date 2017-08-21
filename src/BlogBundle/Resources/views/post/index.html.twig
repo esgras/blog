@@ -42,7 +42,8 @@
 
         {#{% include 'BlogBundle:partials:pagination.html.twig' %}#}
         {{ render(controller('BlogBundle:Helper:pager',
-                {routeName: 'homepage', paramName: 'page', page: page, count: count, perPage: perPage}
+
+                {routeName: 'homepage', params: {page: page, tag: tag}, count: count, perPage: perPage}
             ))
         }}
 

@@ -8,11 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HelperController extends BaseController
 {
-    public function pagerAction($routeName, $paramName, $page, $count, $perPage)
+    public function pagerAction($routeName, $params, $count, $perPage)
     {
         $perPage = $this->getParameter('default.per_page');
         $maxButtons = $this->getParameter('pagination.max_buttons');
+        $page = $params['page'];
+
+        $params['page'] = 1;
+        $url = $this->generateUrl($routeName, $params);
+        #return new Response($url);
+
         $pager = new Pager($page, $perPage, $count, $maxButtons);
+
         $pageList = $pager->getChunk();
 
         if (count($pageList) <= 1) {
@@ -23,7 +30,7 @@ class HelperController extends BaseController
             'page' => $page,
             'pageList' => $pageList,
             'routeName' => $routeName,
-            'paramName' => $paramName,
+            'url' => $url,
             'pageCount' => $pager->getPageCount()
         ]);
    }
