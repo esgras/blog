@@ -6,6 +6,9 @@
         <a href="{{ path('blogbundle_post_create') }}" class="btn btn-info btn-lg">Create New Post</a>
     </div>
     {% if posts is not empty %}
+        {% if tag is not empty %}
+            <h2>Post with tag: {{ tag }}</h2>
+        {% endif %}
         <table class="table">
             <thead>
                 <tr>
@@ -38,7 +41,10 @@
         </table>
 
         {#{% include 'BlogBundle:partials:pagination.html.twig' %}#}
-        {{ render(controller('BlogBundle:Helper:pager', {routeName: 'homepage', paramName: 'page', page: page, count: count})) }}
+        {{ render(controller('BlogBundle:Helper:pager',
+                {routeName: 'homepage', paramName: 'page', page: page, count: count, perPage: perPage}
+            ))
+        }}
 
     {% else %}
         <h1>There are not posts yet...</h1>

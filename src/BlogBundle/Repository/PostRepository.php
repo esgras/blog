@@ -2,31 +2,37 @@
 
 namespace BlogBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class PostRepository extends EntityRepository
+class PostRepository extends BaseRepository
 {
-    public function getPostsForPage($page, $limit, $asc=false)
+    public function getEntitiesCount($params=[])
+    {
+        $query = $this->createQueryBuilder('e')->select('COUNT(e)');
+//            if (!empty($params['tag'])) {
+//                $query->where('e.tags LIKE %'.$params['tag'].'%');
+//            }
+            return (int) $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function getEntitesForPage($page, $limit, $asc=false, $params=[])
     {
         $offset = ($page - 1) * $limit;
-        $query = $this->createQueryBuilder('p')->select('p')
-                            ->setFirstResult($offset)
-                            ->setMaxResults($limit);
+        $query = $this->createQueryBuilder('e')->select('e');
+//        if (!empty($params['tag'])) {
+//            $query->where('e.tags LIKE %'.$params['tag'].'%');
+//        }
+
+           $query->setFirstResult($offset)
+                     ->setMaxResults($limit);
         if ($asc) {
-            $query->addOrderBy('p.id', 'ASC');
+            $query->addOrderBy('e.id', 'ASC');
         } else {
-            $query->addOrderBy('p.id', 'DESC');
+            $query->addOrderBy('e.id', 'DESC');
         }
 
         $paginator =  new Paginator($query, true);
 
         return $paginator;
-    }
-
-    public function getPostsCount()
-    {
-        return (int) $this->createQueryBuilder('p')->select('COUNT(p)')
-                        ->getQuery()->getSingleScalarResult();
     }
 }

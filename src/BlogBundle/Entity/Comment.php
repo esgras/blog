@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BlogBundle\Repository\CommentRepository")
  * @ORM\Table(name="comment")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -71,7 +71,7 @@ class Comment
     /**
      * @return mixed
      */
-    public function getCreateTime()
+    public function getcreate_time()
     {
         return $this->create_time;
     }
@@ -106,6 +106,20 @@ class Comment
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function approve()
+    {
+        if ($this->getStatus() != Comment::STATUS_APPROVED) {
+            $this->setStatus(Comment::STATUS_APPROVED);
+        }
+    }
+
+    public function disapprove()
+    {
+        if ($this->getStatus() != Comment::STATUS_PENDING) {
+            $this->setStatus(Comment::STATUS_PENDING);
+        }
     }
 
     /**
@@ -182,12 +196,12 @@ class Comment
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addConstraint('author', new Assert\NotBlank());
-        $metadata->addConstraint('author', new Assert\Length(['min' => 3, 'max' => 20]));
-        $metadata->addConstraint('email', new Assert\NotBlank());
-        $metadata->addConstraint('email', new Assert\Email());
-        $metadata->addConstraint('url', new Assert\Url);
-        $metadata->addConstraint('content', new Assert\NotBlank());
-        $metadata->addConstraint('length', new Assert\Length(['max' => 100]));
+        $metadata->addPropertyConstraint('author', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('author', new Assert\Length(['min' => 3, 'max' => 20]));
+        $metadata->addPropertyConstraint('email', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
+        $metadata->addPropertyConstraint('url', new Assert\Url);
+        $metadata->addPropertyConstraint('content', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('content', new Assert\Length(['max' => 100]));
     }
 }

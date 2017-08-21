@@ -1,0 +1,20 @@
+{% for comment in comments %}
+    <div class="comment" id="c{{ comment.id }}">
+        <a href="{{ path('blogbundle_post_view', {'id': post.id}) ~ '#c' ~ comment.id}}"
+            class="cid" title="Permalink to this comment">{{ '#' ~ comment.id }}</a>
+        <div class="author">
+            {% if comment.url is not empty %}
+                <a href="{{ comment.url }}">{{ comment.author }}</a>
+            {% else %}
+                {{ comment.author }}
+            {% endif %}
+            says:
+        </div>
+        <div class="time">
+            {{ comment.create_time | date('F j, Y \a\t h:i a') }}
+        </div>
+        <div class="content">
+            {{ comment.content }}
+        </div>
+    </div><!-- comment -->
+{% endfor %}

@@ -1,24 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Homepage{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    {% block stylesheets %}{% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-</head>
-<body>
-
-    {% include 'BlogBundle:partials:navigation.html.twig' %}
-
-    <div class="container">
-        {% include 'BlogBundle:partials:flash.html.twig' %}
-        {% block body %}
-        {% endblock %}
+{% extends 'BlogBundle::base.html.twig' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            {% block body %}
+            {% endblock %}
+        </div>
+        <div class="col-md-3">
+            {{ render(controller('BlogBundle:Helper:tagCloud')) }}
+        </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    {% block javascripts %}{% endblock %}
-</body>
-</html>
+{% endblock %}

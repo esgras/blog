@@ -1,4 +1,5 @@
 {% extends 'BlogBundle::main.html.twig' %}
+
 {% block body %}
     <div class="row">
         <div class="col-md-12">
@@ -11,12 +12,19 @@
             </div>
             <br><br>
             <div id="comments">
-                {% if post.comments|length  %}
-                    <b>Some comments</b>
-                {% else %}
-                    <b>No comments</b>
+                {% if post.comments | length  %}
+                    <h3>{{ post.comments | length }} comment(s)</h3>
+
+                    {{ render(controller('BlogBundle:Helper:comments', {'post': post, 'comments': post.comments})) }}
                 {% endif %}
+
+                    {% for key, flash in app.flashes('success') if key == 0 %}
+                        <div class="alert alert-success">{{ flash }}</div>
+                    {% else %}
+                        {{ form(form) }}
+                    {% endfor %}
             </div>
         </div>
     </div>
 {% endblock %}
+{% block flashes %}{% endblock %}

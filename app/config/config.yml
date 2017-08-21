@@ -9,7 +9,7 @@ imports:
 parameters:
     locale: en
     comments.need_approve: false
-    posts.per_page: 5
+    default.per_page: 5
     pagination.max_buttons: 5
 
 framework:

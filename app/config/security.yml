@@ -50,7 +50,7 @@ security:
                   path: logout
 
     access_control:
-        - {path: ^/$, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
+        - {path: ^/, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
         - {path: ^/post/view, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
         - {path: (index|login|\d+)$, roles: 'IS_AUTHENTICATED_ANONYMOUSLY'}
         - {path: .*, roles: 'ROLE_USER'}

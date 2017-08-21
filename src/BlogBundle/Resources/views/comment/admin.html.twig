@@ -1,0 +1,67 @@
+{% extends 'BlogBundle::main.html.twig' %}
+{% block title %}Admin Comments{% endblock %}
+{% block body %}
+    {% if comments is not empty %}
+        <h2>Comments</h2>
+        {% for comment in comments %}
+            <div class="comment" id="c{{ comment.id }}">
+
+                <a href="{{ path('blogbundle_post_view', {'id': comment.post.id}) ~ '#c' ~ comment.id}}"
+                   class="cid" title="Permalink to this comment">{{ '#' ~ comment.id }}</a>
+                <div class="author">
+                    {{ comment.author }} says on
+                    <a href="{{ path('blogbundle_post_view', {id: comment.post.id}) }}#">{{ comment.post.title }}</a>	</div>
+                <div class="time">
+                    {% if comment.status == constant('BlogBundle\\Entity\\Comment::STATUS_PENDING') %}
+                        <a href="{{ path('blogbundle_comment_approve', {id: comment.id}) }}" class="status">Approve</a>
+                    {% else %}
+                        <a href="{{ path('blogbundle_comment_approve', {id: comment.id, disapprove: 1}) }}" class="status">Disapprove</a>
+                    {% endif %} |
+                    <a href="{{ path('blogbundle_comment_update', {id: comment.id}) }}">Update</a> |
+                    <a class="delete" href="{{ path('blogbundle_comment_delete', {id: comment.id}) }}">Delete</a> |
+                    {{ comment.create_time | date('F j, Y \a\t h:i a') }}
+                </div>
+
+                <div class="content">{{ comment.content }}</div>
+
+            </div><!-- comment -->
+            <br>
+        {% endfor %}
+
+        {{ render(controller('BlogBundle:Helper:pager',
+                {routeName: 'blogbundle_comment_admin', paramName: 'page', page: page, count: count, perPage: perPage}
+            ))
+        }}
+    {% else %}
+        <h1>There are not comments yet</h1>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $('.delete').click(function(e) {
+            e.preventDefault();
+            if (!confirm('Are you sure to delete this comment?')) {
+                return;
+            }
+            $.post($(this).attr('href'), function(resp) {
+                location.reload();
+            });
+        });
+        $('.status').click(function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            var link = $this.attr('href');
+
+            $.post(link, function(resp) {
+                $this.html(resp);
+                var pattern = /(\d+)\/\d+$/;
+                if (link.search(pattern) != -1) {
+                    link = link.replace(pattern, '$1');
+                } else {
+                    link += '/1';
+                }
+                $this.attr('href', link);
+            });
+        });
+    </script>
+{% endblock %}

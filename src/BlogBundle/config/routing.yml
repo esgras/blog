@@ -1,8 +1,3 @@
-homepage:
-      path: /{page}
-      defaults: {_controller: BlogBundle:Post:index, page: 1}
-      requirements: {page: \d+}
-
 login:
      path: /login
      defaults: {_controller: BlogBundle:User:login}
@@ -28,6 +23,13 @@ blogbundle_post_view:
     path: /post/view/{id}
     defaults: {_controller: BlogBundle:Post:view}
     requirements: {id: \d+}
+    methods: 'GET'
+
+blogbundle_post_view_handle:
+    path: /post/view/{id}
+    defaults: {_controller: BlogBundle:Post:viewHandle}
+    requirements: {id: \d+}
+    methods: POST
 
 blogbundle_post_delete:
     path: /post/delete/{id}
@@ -35,6 +37,33 @@ blogbundle_post_delete:
     requirements: {id: \d+}
     methods: POST
 
+blogbundle_comment_admin:
+    path: /admin/comment/{page}
+    defaults: {_controller: BlogBundle:Comment:admin, page: 1}
+    requirements: {page: \d+}
+
+blogbundle_comment_approve:
+    path: /admin/comment/approve/{id}/{disapprove}
+    defaults: {_controller: BlogBundle:Comment:approve, disapprove: 0}
+    requirements: {id: \d+,dissapprove: \d+ }
+    methods: POST
+
+blogbundle_comment_update:
+    path: /admin/comment/update/{id}
+    defaults: {_controller: BlogBundle:Comment:update}
+    requirements: {id: \d+}
+
+blogbundle_comment_delete:
+    path: /admin/comment/delete/{id}
+    defaults: {_controller:BlogBundle:Comment:delete}
+    requirements: {id: \d+}
+    methods: POST
+
 blogbundle_test:
     path: /test
     defaults: {_controller: BlogBundle:Post:test }
+
+homepage:
+      path: /{tag}/{page}
+      defaults: {_controller: BlogBundle:Post:index, page: 1, tag: false}
+      requirements: {page: \d+, tag: '[^/]*'}
