@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -164,17 +164,13 @@ class User implements \Serializable, UserInterface
         }
     }
 
-    public static function loadValidationMetadata(ClassMetadata $metadata)
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('username', new NotBlank(['message' => '{{ value }} cannot be empty']));
-        $metadata->addPropertyConstraint('username', new Length(['min' => 4, 'max' => 15]));
-//        $metadata->addPropertyConstraint('content', new NotBlank());
-//        $metadata->addPropertyConstraint('status', new NotBlank());
-//        $metadata->addPropertyConstraint('status', new Type('integer'));
-//        $metadata->addPropertyConstraint('username', new Assert\NotBlank())
-//                        ->addPropertyConstraint('username', new Assert\Length(['min' => 4, 'max' => 15]));
-//        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
-//        $metadata->addPropertyConstraint('email', new Assert\NotBlank())
-//                       ->addPropertyConstraint('email', new Assert\EmailValidator());
+        $metadata->addPropertyConstraint('username', new Assert\NotBlank(['message' => '{{ value }} cannot be empty']));
+        $metadata->addPropertyConstraint('username', new Assert\Length(['min' =>4, 'max' => 20]));
+        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('password', new Assert\Length(['min' =>5, 'max' => 20]));
+        $metadata->addPropertyConstraint('email', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
     }
 }

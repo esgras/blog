@@ -11,6 +11,7 @@ parameters:
     comments.need_approve: false
     default.per_page: 5
     pagination.max_buttons: 5
+    mail.contacts: 'progvadm@gmail.com'
 
 framework:
     #esi: ~

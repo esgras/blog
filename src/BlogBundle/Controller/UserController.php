@@ -25,14 +25,15 @@ class UserController extends BaseController
         $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest(Request::createFromGlobals());
 
-//        var_dump($user); die;
-//        var_dump($form->isValid()); die;
-
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->get('security.encoder_factory')->getEncoder($user)->encodePassword($user->getPassword(), $user->getSalt());
             $user->setPassword($password);
             $this->em->persist($user);
             $this->em->flush();
+
+            $this->sendMail('Registration at blog', $user->getEmail(),
+                '<h1>You have been successfull registred</h1>', $this->getParameter('mail.contacts'));
+
             $this->addFlash('success', "You have been successfully registred, now you can login");
             return $this->redirectToRoute('homepage');
         }
@@ -41,5 +42,15 @@ class UserController extends BaseController
             'user' => $user,
             'form' => $form->createView()
         ]);
+    }
+
+    protected function sendMail($subject, $to, $body, $from=null)
+    {
+        $message = \Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setTo($to)
+                    ->setFrom($from)
+                    ->setBody($body, 'text/html');
+        return $this->get('mailer')->send($message);
     }
 }
