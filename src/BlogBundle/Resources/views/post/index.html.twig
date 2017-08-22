@@ -3,7 +3,7 @@
 
 {% block body %}
     <div class="row col-md-12">
-        <a href="{{ path('blogbundle_post_create') }}" class="btn btn-info btn-lg">Create New Post</a>
+
     </div>
     {% if posts is not empty %}
         {% if tag is not empty %}
@@ -42,8 +42,7 @@
 
         {#{% include 'BlogBundle:partials:pagination.html.twig' %}#}
         {{ render(controller('BlogBundle:Helper:pager',
-
-                {routeName: 'homepage', params: {page: page, tag: tag}, count: count, perPage: perPage}
+                {routeName: tag ? 'homepage' : 'post_index', params: {page: page, tag: tag}, count: count, perPage: perPage}
             ))
         }}
 

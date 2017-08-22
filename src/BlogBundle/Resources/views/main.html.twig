@@ -6,7 +6,11 @@
             {% endblock %}
         </div>
         <div class="col-md-3">
+            {% if app.user %}
+                {{ render(controller('BlogBundle:Helper:menu')) }}
+            {% endif %}
             {{ render(controller('BlogBundle:Helper:tagCloud')) }}
+            {{ render(controller('BlogBundle:Helper:latestComments')) }}
         </div>
     </div>
 {% endblock %}

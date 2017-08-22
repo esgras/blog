@@ -23,7 +23,7 @@ class PostController extends BaseController
 
     public function testAction()
     {
-         throw $this->createAccessDeniedException('Denied Action');
+        throw $this->createAccessDeniedException('Denied Action');
 
         return new Response('Some text');
     }
@@ -32,17 +32,14 @@ class PostController extends BaseController
     {
         $perPage = $this->getParameter('default.per_page');
         $postsCount = $this->repo->getEntitiesCount(['tag' => $tag]);
-
         $posts = $this->repo->getEntitesForPage($page, $perPage, false, ['tag' => $tag]);
         $pageCount = (new Pager($page, $perPage, $postsCount))->getPageCount();
-
-        #var_dump($pageCount); die;
 
         if ($page < 1 || $page > $pageCount) {
             throw $this->createNotFoundException();
         }
 
-         return $this->render('BlogBundle:post:index.html.twig', [
+        return $this->render('BlogBundle:post:index.html.twig', [
             'posts' => $posts,
             'count' => $postsCount,
             'page' => $page,
@@ -60,8 +57,7 @@ class PostController extends BaseController
         ]);
         $form->handleRequest(Request::createFromGlobals());
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getUser()->addPost($post);
             $post->setTags($this->get('blog.tagservice')->normalizeTags($post->getTags()));
             $this->em->persist($post);
@@ -84,8 +80,7 @@ class PostController extends BaseController
         ]);
         $form->handleRequest(Request::createFromGlobals());
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getUser()->addPost($post);
             $post->setTags($this->get('blog.tagservice')->normalizeTags($post->getTags()));
             $this->em->flush();
@@ -151,7 +146,6 @@ class PostController extends BaseController
             throw $this->createNotFoundException('Requested post not found...');
         }
     }
-
 
 
     public function deleteAction($id)

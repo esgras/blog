@@ -2,9 +2,9 @@
     <div class="panel-heading">
         <h3 class="panel-title">Tag Cloud</h3>
     </div>
-    <div class="panel-body">
+    <div class="panel-body tag-cloud">
         {% for tag in tags %}
-            <a href="{{ path('homepage', {tag: tag.name}) }}">{{ tag.name }}</a>
+             <a href="{{ path('homepage', {tag: tag.name}) }}" class="{{ tag.weight }}">{{ tag.name }}</a>
         {% endfor %}
     </div>
 </div>

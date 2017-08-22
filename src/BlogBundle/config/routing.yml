@@ -5,6 +5,10 @@ login:
 logout:
     path: /logout
 
+register:
+    path: /register
+    defaults: {_controller: BlogBundle:User:register}
+
 admin:
     path: /admin
     defaults: {_controller: BlogBundle:User:admin}
@@ -63,7 +67,12 @@ blogbundle_test:
     path: /test
     defaults: {_controller: BlogBundle:Post:test }
 
+post_index:
+    path: /{page}
+    defaults: {_controller:BlogBundle:Post:index, page:1, tag: false}
+    requirements: {page: \d+}
+
 homepage:
       path: /{tag}/{page}
       defaults: {_controller: BlogBundle:Post:index, page: 1, tag: false}
-      requirements: {page: \d+, tag: '[^/]*'}
+      requirements: {page: \d+, tag: '[\w]*'}

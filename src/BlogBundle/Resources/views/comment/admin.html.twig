@@ -29,9 +29,10 @@
         {% endfor %}
 
         {{ render(controller('BlogBundle:Helper:pager',
-                {routeName: 'blogbundle_comment_admin', paramName: 'page', page: page, count: count, perPage: perPage}
+                {routeName: 'blogbundle_comment_admin', params: {page: page}, count: count, perPage: perPage}
             ))
         }}
+
     {% else %}
         <h1>There are not comments yet</h1>
     {% endif %}

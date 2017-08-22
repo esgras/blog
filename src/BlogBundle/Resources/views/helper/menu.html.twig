@@ -1,0 +1,12 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Menu</h3>
+    </div>
+    <div class="panel-body tag-cloud">
+        <ul class="nav nav-pills nav-stacked">
+            <li {% if route == 'blogbundle_post_create' %}class="active"{% endif %}><a href="{{ path('blogbundle_post_create') }}" class="">Create New Post</a></li>
+            <li {% if route == 'admin' %}class="active"{% endif %}><a href="{{ path('admin') }}" class="">Posts Management</a></li>
+            <li {% if route == 'blogbundle_comment_admin' %}class="active"{% endif %}><a href="{{ path('blogbundle_comment_admin') }}" class="">Comments Management</a></li>
+        </ul>
+    </div>
+</div>

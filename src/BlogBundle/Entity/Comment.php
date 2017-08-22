@@ -79,9 +79,9 @@ class Comment
     /**
      * @return mixed
      */
-    public function getContent()
+    public function getContent($length=false)
     {
-        return $this->content;
+        return $length ? substr($this->content, 0, $length) : $this->content;
     }
 
     /**

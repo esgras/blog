@@ -1,0 +1,16 @@
+{% if latestComments is not empty %}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Latest comments</h3>
+    </div>
+    <div class="panel-body tag-cloud">
+        {% for comment in latestComments %}
+            <div class="latest-comment">
+                {{ comment.author }} on <a href="{{ path('blogbundle_post_view', {id: comment.post.id}) }}">{{ comment.post.title }}</a>
+                at {{ comment.create_time | date("Y-m-d H:i")}}<br>
+                <div class="comment-content">{{ comment.content(50) }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
