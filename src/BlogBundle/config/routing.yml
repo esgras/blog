@@ -9,6 +9,10 @@ register:
     path: /register
     defaults: {_controller: BlogBundle:User:register}
 
+forgot_password:
+    path: /forgot
+    defaults: {_controller: BlogBundle:User:forgot}
+
 admin:
     path: /admin
     defaults: {_controller: BlogBundle:User:admin}

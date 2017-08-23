@@ -44,8 +44,14 @@ security:
             #access_denied_handler: blog.accessdenied
             entry_point: blog.entrypoint
             form_login:
-                  login_path: login
-                  check_path: login
+                  login_path: test
+                  check_path: test
+                  username_parameter: test[username]
+                  password_parameter: test[password]
+                  csrf_parameter: test[_token]
+                  #csrf_provider: form.csrf_provider
+                  #intention: authenticate
+                  #csrf_token_generator: security.csrf.token_manager
             logout:
                   path: logout
 

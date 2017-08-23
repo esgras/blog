@@ -4,6 +4,7 @@ namespace BlogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,7 +23,7 @@ class User implements \Serializable, UserInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     protected $username;
 
@@ -32,7 +33,7 @@ class User implements \Serializable, UserInterface
     protected $password;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", unique=true)
      */
     protected $email;
 
@@ -166,11 +167,13 @@ class User implements \Serializable, UserInterface
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('username', new Assert\NotBlank(['message' => '{{ value }} cannot be empty']));
+        $metadata->addPropertyConstraint('username', new Assert\NotBlank(['message' => 'Username cannot be empty']));
         $metadata->addPropertyConstraint('username', new Assert\Length(['min' =>4, 'max' => 20]));
-        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
+        $metadata->addConstraint(new UniqueEntity(['fields' => 'username', 'message' => 'This username is already in use']));
+        $metadata->addPropertyConstraint('password', new Assert\NotBlank(['message' => 'Password cannot be empty']));
         $metadata->addPropertyConstraint('password', new Assert\Length(['min' =>5, 'max' => 20]));
-        $metadata->addPropertyConstraint('email', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\NotBlank(['message' => 'Email cannot be empty']));
         $metadata->addPropertyConstraint('email', new Assert\Email());
+        $metadata->addConstraint(new UniqueEntity(['fields' => ['email'], 'message' => 'This email is already in use']));
     }
 }

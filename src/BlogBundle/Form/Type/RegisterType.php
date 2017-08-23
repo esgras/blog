@@ -17,13 +17,14 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('username', TextType::class, ['required' => false])
+                    ->add('email', EmailType::class, ['required' => false])
                     ->add('password', RepeatedType::class, [
                                 'type' => PasswordType::class,
                                 'required' => false,
+                                'invalid_message' => 'Passwords don\'t match',
                                 'first_options' => ['label' => 'Password'],
                                 'second_options' => ['label' => 'Password repeat']
-                    ])->add('email', EmailType::class, ['required' => false])
-                    ->add('submit', SubmitType::class);
+                    ])->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

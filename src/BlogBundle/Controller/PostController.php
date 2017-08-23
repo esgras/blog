@@ -5,7 +5,9 @@ namespace BlogBundle\Controller;
 use BlogBundle\Entity\Comment;
 use BlogBundle\Entity\Post;
 use BlogBundle\Form\Type\CommentType;
+use BlogBundle\Form\Type\LoginType;
 use BlogBundle\Form\Type\PostType;
+use BlogBundle\Form\Type\TestType;
 use BlogBundle\Helpers\Pager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,9 +25,14 @@ class PostController extends BaseController
 
     public function testAction()
     {
-        throw $this->createAccessDeniedException('Denied Action');
+        $data = ['text' => 'Some Text'];
+        #$form = $this->createForm(TestType::class);
+        $form = $this->createForm(LoginType::class);
+        $form->handleRequest(Request::createFromGlobals());
 
-        return new Response('Some text');
+        return $this->render('BlogBundle:post:test.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     public function indexAction($page, $tag)

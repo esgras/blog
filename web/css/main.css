@@ -1,0 +1,16 @@
+.tag-cloud a{
+    text-decoration: none;
+}
+.tag-cloud .weight-1 { font-size: 12px; }
+.tag-cloud .weight-2 { font-size: 15px; }
+.tag-cloud .weight-3 { font-size: 18px; }
+.tag-cloud .weight-4 { font-size: 21px; }
+.tag-cloud .weight-5 { font-size: 24px; }
+
+.latest-comment {
+    font-size: 10px;
+}
+.latest-comment .comment-content {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
