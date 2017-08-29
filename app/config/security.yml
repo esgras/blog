@@ -33,25 +33,26 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        #safe:
-         #     pattern: ^/$
-         #     provider: in_memory
-        #      security: false
-
         main:
             provider: chain_provider
             anonymous: ~
             #access_denied_handler: blog.accessdenied
             entry_point: blog.entrypoint
+
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+
             form_login:
-                  login_path: test
-                  check_path: test
-                  username_parameter: test[username]
-                  password_parameter: test[password]
-                  csrf_parameter: test[_token]
+                  login_path:  login
+                  check_path: login
+                 # username_parameter: test[username]
+#                  password_parameter: test[password]
+#                  csrf_parameter: test[_token]
                   #csrf_provider: form.csrf_provider
                   #intention: authenticate
-                  #csrf_token_generator: security.csrf.token_manager
+                  csrf_token_generator: security.csrf.token_manager
             logout:
                   path: logout
 

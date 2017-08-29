@@ -38,6 +38,11 @@ class User implements \Serializable, UserInterface
     protected $email;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $hash;
+
+    /**
      * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
      */
     protected $posts;
@@ -111,6 +116,22 @@ class User implements \Serializable, UserInterface
             $this->username,
             $this->password
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @param mixed $hash
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
     }
 
     public function unserialize($serialized)

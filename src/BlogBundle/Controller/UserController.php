@@ -5,11 +5,15 @@ namespace BlogBundle\Controller;
 use BlogBundle\Entity\User;
 use BlogBundle\Form\Type\LoginType;
 use BlogBundle\Form\Type\RegisterType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserController extends BaseController
 {
@@ -17,37 +21,69 @@ class UserController extends BaseController
 
     public function loginAction()
     {
-        $data = ['username' => 'hello'];
-        $form = $this->createForm(LoginType::class, $data);
-        $form->handleRequest(Request::createFromGlobals());
-        #$errors = $form->getErrors();
-        #var_dump($errors); die;
-        #$form->isSubmitted() && $form->isValid();
-
         $authUtils = $this->get('security.authentication_utils');
         $errors = $authUtils->getLastAuthenticationError();
-        #var_dump($error); die;
-        #$lastUsername = $authUtils->getLastUsername();
-        #$form = $this->createFormForModel();
 
+        $lastUsername = $authUtils->getLastUsername();
 
         return $this->render('BlogBundle:user:login.html.twig', array(
-            #'last_username' => $lastUsername,
+            'last_username' => $lastUsername,
             'errors'         => $errors,
-            'form' => $form->createView()
         ));
     }
-//
-//    public function loginAction(Request $request, AuthenticationUtils $authUtils)
-//    {
-//        $error = $authUtils->getLastAuthenticationError();
-//        $lastUsername = $authUtils->getLastUsername();
-//
-//        return $this->render('BlogBundle:user:login.html.twig', [
-//            'last_username' => $lastUsername,
-//            'error' => $error
-//        ]);
-//    }
+
+    public function forgotAction()
+    {
+        $form = $this->createFormBuilder()
+                            ->add('email', TextType::class, [
+                                    'constraints' => [new Email(), new NotBlank()], 'required' => false
+                            ])->add('reset', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
+                            ->getForm();
+        $form->handleRequest(Request::createFromGlobals());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $email = trim($data['email']);
+            /** @var $user User*/
+            $user = $this->repo->findOneBy(['email' => $email]);
+            if ($user == NULL) {
+                $form->get('email')->addError(new FormError('There is no user with that email'));
+            } else {
+                $this->addFlash('success', 'Check your email to reset password');
+                $subject = 'Forgot password';
+                $hash = md5(uniqid(rand(), true));
+                $user->setHash($hash);
+                $this->em->flush();
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setFrom($this->getParameter('mail.contacts'))
+                    ->setTo($email)
+                    ->setBody($this->renderView('BlogBundle:mail:forgot.html.twig', ['subject' => $subject, 'hash' => $hash]), 'text/html');
+                $this->get('mailer')->send($message);
+
+                return $this->redirectToRoute('homepage');
+            }
+        }
+
+        return $this->render('BlogBundle:user:forgot.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    public function resetAction($hash)
+    {
+        $user = $this->repo->findOneBy(['hash' => $hash]);
+        if ($user == NULL) {
+            throw $this->createNotFoundException('User with that hash not found');
+        }
+        $password = substr(md5(uniqid(rand(), true)), 0, 10);
+        $pass = $this->get('security.encoder_factory')->getEncoder($user)->encodePassword($password, $user->getSalt());
+        $user->setPassword($pass);
+        $this->em->flush();
+        $this->sendMail('Your new password', 'esgras@ukr.net',
+            $this->renderView('BlogBundle:mail:reset.html.twig', ['password' => $password]));
+        return $this->render('BlogBundle:user:reset.html.twig');
+    }
 
     public function adminAction()
     {
@@ -86,6 +122,7 @@ class UserController extends BaseController
 
     protected function sendMail($subject, $to, $body, $from=null)
     {
+        $from = isset($from) ? $from : $this->getParameter('mail.contacts');
         $message = \Swift_Message::newInstance()
                     ->setSubject($subject)
                     ->setTo($to)

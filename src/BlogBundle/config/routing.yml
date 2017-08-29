@@ -13,6 +13,11 @@ forgot_password:
     path: /forgot
     defaults: {_controller: BlogBundle:User:forgot}
 
+reset_password:
+    path: /reset/{hash}
+    defaults: {_controller: BlogBundle:User:reset}
+    requirements: {hash: '[^/]{32}'}
+
 admin:
     path: /admin
     defaults: {_controller: BlogBundle:User:admin}
